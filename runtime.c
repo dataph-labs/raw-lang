@@ -5,6 +5,7 @@
 #include <string.h>
 
 #include "reg-memory.h"
+#include "func-space.h"
 
 int main(void) {
     printf("Hello, raw-runtime!\n");
@@ -173,12 +174,33 @@ int main(void) {
         pc++;
 
         switch (op) {
-			case 0x00:
+			case 0x00: {
 				halt = true;
 				printf("HALT by 0x00...\n");
 				break;
+			}
 
-			case 0x01: { // LOAD_CONST
+			case 0x01: {
+				pc = 0;
+				break;
+			}
+
+			case 0x02: {
+				uint8_t reg_idx = bytecode[pc++];
+				Val *v = &registers[reg_idx];
+
+				switch (v->type) {
+				case TYPE_STRING:
+					CALL_handle(v->as.string);
+					break;
+
+				default:
+					printf("Unknown type. CALL support only call_bytes.\n");
+				}	
+				break;
+			}
+
+			case 0x03: { // LOAD_CONST
 				printf("LOAD CONST\n");
 
 				uint8_t reg_idx = bytecode[pc++];
@@ -194,7 +216,7 @@ int main(void) {
 				break;
 			}
 
-			case 0x02: { // PRINT
+			case 0x04: { // PRINT
 				uint8_t reg_idx = bytecode[pc++];
 				Val *v = &registers[reg_idx];
 
@@ -240,6 +262,9 @@ int main(void) {
 				}
 				break;
 			}
+
+			case 0x05:
+
         }
     }
 }

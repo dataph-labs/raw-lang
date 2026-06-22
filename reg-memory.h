@@ -1,5 +1,5 @@
-#ifndef REGaMEMORY_H
-#define REGaMEMORY_H
+#ifndef REG_MEMORY_H
+#define REG_MEMORY_H
 
 #include <stdio.h>
 #include <stdint.h>
@@ -8,6 +8,8 @@
 #include <stdbool.h>
 
 #define REG_NUMBER 32
+#define SPEC_REG_NUMBER 2
+#define SPEC_END 1
 
 typedef enum {
     TYPE_INT32,
@@ -21,13 +23,14 @@ typedef enum {
     TYPE_INT16,
     TYPE_UNS8,
     TYPE_UNS16,
-    TYPE_BOOL
+    TYPE_BOOL,
+    TYPE_CALL_BYTE
 } ValType;
 
 typedef struct {
     ValType type;
     union {
-            int32_t int32;
+        int32_t int32;
         int64_t int64;
         uint32_t uns32;
         uint64_t uns64;
@@ -42,6 +45,6 @@ typedef struct {
     } as;
 } Val;
 
-void init_cpu_memory(void);
+// void init_cpu_memory(void);
 
 #endif

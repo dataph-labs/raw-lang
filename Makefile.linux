@@ -10,7 +10,7 @@ rawcc: cc.c
 	$(CC) $(CFLAGS) -o $@ cc.c
 
 raw-runtime: runtime.c
-	$(CC) $(CFLAGS) -o $@ runtime.c reg-memory.c
+	$(CC) $(CFLAGS) -o $@ runtime.c reg-memory.c func-space.c
 
 install: $(TARGETS)
 	install -d $(DESTDIR)$(PREFIX)/bin
