@@ -7,7 +7,52 @@
 #include "reg-memory.h"
 #include "func-space.h"
 
-int main(void) {
+uint8_t *load_bytecode(const char *filepath, size_t *out_size) {
+    if (out_size != NULL) {
+        *out_size = 0;
+    } else {
+        return NULL;
+    }
+
+    FILE *file = fopen(filepath, "rb");
+    if (file == NULL) {
+        return NULL;
+    }
+
+    if (fseek(file, 0, SEEK_END) != 0) {
+        fclose(file);
+        return NULL;
+    }
+    
+    long file_size = ftell(file);
+    if (file_size <= 0) {
+        fclose(file);
+        return NULL;
+    }
+    
+    // Return the reading pointer to the beginning of the file.
+    rewind(file);
+
+    uint8_t *bytecode = (uint8_t *)malloc(file_size);
+    if (bytecode == NULL) {
+        // Не удалось выделить память
+        fclose(file);
+        return NULL;
+    }
+
+    size_t bytes_read = fread(bytecode, 1, file_size, file);
+    fclose(file);
+
+    if (bytes_read == 0) {
+        free(bytecode);
+        return NULL;
+    }
+
+    *out_size = bytes_read;
+    return bytecode;
+}
+
+int main(int argc, char *argv[]) {
     printf("Hello, raw-runtime!\n");
     printf("Init runtime...\n");
 
@@ -20,10 +65,10 @@ int main(void) {
 	uint8_t default_bytecode[] = {
     // Header
     0x52, 0x41, 0x57, 0x00, // "RAW\0"
-    0x01, 0x00,             // version 1
-    0x02, 0x00,             // const_size  2
-    0x01, 0x00,             // type_count 1
-    0x01, 0x00,           // method_count 1
+    0x01, 0x00,             // version 	    1
+    0x03, 0x00,             // const_size   3
+    0x00, 0x00,             // type_count   1
+    0x00, 0x00,             // method_count 1
     
     // Constant Pool
     0x01,
@@ -31,20 +76,39 @@ int main(void) {
     0x07,
     0x0D, 0x00,
     0x48, 0x65, 0x6C, 0x6C, 0x6F, 0x2C, 0x20, 0x77, 0x6F, 0x72, 0x6C, 0x64, 0x21,
+    0x01,
+    0x00, 0x00, 0x00, 0x00,
 
     // Type Table
+
     // Method Table
 
     // Code
-    0x01, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x03, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x04, 0x00,
+
+    0x03, 0x01, 0x01, 0x00, 0x00, 0x00,
+    0x04, 0x01,
+
+    0x03, 0x00, 0x02, 0x00, 0x00, 0x00,
     0x02, 0x00,
-    0x01, 0x01, 0x01, 0x00, 0x00, 0x00,
-    0x02, 0x01,
+    0x04, 0x00,
+
     0x00,
 	};
 
-    // In the future, there is code that reads ".trueraw" files.
-    uint8_t *bytecode = NULL;
+    // In the future, there is code that reads ".braw" files.
+	const char *path = NULL; 
+
+    if (argc < 2) {
+        printf("No paths specified, trying the standard path.\n");
+        path = "resources.braw";
+    } else {
+    	path = argv[1];
+    }
+
+    size_t size = 0;
+    uint8_t *bytecode = load_bytecode(path, &size);
 
     uint16_t const_size = 0;
 
@@ -174,24 +238,24 @@ int main(void) {
         pc++;
 
         switch (op) {
-			case 0x00: {
+			case 0x00: { // HALT
 				halt = true;
 				printf("HALT by 0x00...\n");
 				break;
 			}
 
-			case 0x01: {
+			case 0x01: { // RESET
 				pc = 0;
 				break;
 			}
 
-			case 0x02: {
+			case 0x02: { // CALL
 				uint8_t reg_idx = bytecode[pc++];
 				Val *v = &registers[reg_idx];
 
 				switch (v->type) {
-				case TYPE_STRING:
-					CALL_handle(v->as.string);
+				case TYPE_INT32:
+					CALL_handle(v->as.int32);
 					break;
 
 				default:
@@ -263,8 +327,12 @@ int main(void) {
 				break;
 			}
 
-			case 0x05:
+			case 0x05: { // ADD
+
+			}
 
         }
     }
+
+    free(const_pool);
 }

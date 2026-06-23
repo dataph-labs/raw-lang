@@ -1,5 +1,11 @@
 #include "func-space.h"
 
-void CALL_handle(const char *s) {
-	printf("CALL");
+#include <stdio.h>
+
+void CALL_handle(int32_t call_byte) {
+	switch (call_byte) {
+		case 0:
+			printf("PRINTF BY CALL\n");
+			break;
+	}
 }

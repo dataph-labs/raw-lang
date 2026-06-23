@@ -23,8 +23,7 @@ typedef enum {
     TYPE_INT16,
     TYPE_UNS8,
     TYPE_UNS16,
-    TYPE_BOOL,
-    TYPE_CALL_BYTE
+    TYPE_BOOL
 } ValType;
 
 typedef struct {
