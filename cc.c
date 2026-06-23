@@ -34,7 +34,7 @@ static void buf_ensure_capacity(ByteBuffer *buf, size_t needed) {
 
         uint8_t *temp = realloc(buf->data, buf->capacity);
         if (temp == NULL) {
-            perror("Не удалось выделить память для буфера");
+            perror("Failed to allocate memory for the buffer.");
             exit(1);
         }
         buf->data = temp;
@@ -66,7 +66,7 @@ int save_bytecode(const char *filepath, const uint8_t *bytecode, size_t size) {
 
     FILE *file = fopen(filepath, "wb");
     if (file == NULL) {
-        perror("Ошибка открытия файла для записи");
+        perror("Error opening file for recording.");
         return 0;
     }
 
