@@ -87,7 +87,7 @@ int main(void) {
     uint8_t base_header[] = { 0x52, 0x41, 0x57, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
     buf_write_bytes(&code, base_header, sizeof(base_header));
 
-    if (save_bytecode("resourses.braw", code.data, sizeof(code.size))) {
+    if (save_bytecode("resourses.rawb", code.data, sizeof(code.size))) {
         printf("COMPLETED without errors.\n");
     } else {
         fprintf(stderr, "Write ERROR.\n");

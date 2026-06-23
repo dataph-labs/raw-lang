@@ -102,7 +102,7 @@ int main(int argc, char *argv[]) {
 
     if (argc < 2) {
         printf("No paths specified, trying the standard path.\n");
-        path = "resources.braw";
+        path = "resources.rawb";
     } else {
     	path = argv[1];
     }
