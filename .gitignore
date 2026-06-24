@@ -1,7 +1,7 @@
 build/
 rbuild/
 
-./rawcc
-./raw-runtime
+rawcc
+raw-runtime
 *.o
 *.rawb
