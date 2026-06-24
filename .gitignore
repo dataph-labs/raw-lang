@@ -1,0 +1,7 @@
+build/
+rbuild/
+
+rawcc
+raw-runtime
+*.o
+*.rawb

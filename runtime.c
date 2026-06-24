@@ -67,8 +67,8 @@ int main(int argc, char *argv[]) {
     0x52, 0x41, 0x57, 0x00, // "RAW\0"
     0x01, 0x00,             // version 	    1
     0x03, 0x00,             // const_size   3
-    0x00, 0x00,             // type_count   1
-    0x00, 0x00,             // method_count 1
+    0x00, 0x00,             // type_count   0
+    0x00, 0x00,             // method_count 0
     
     // Constant Pool
     0x01,
